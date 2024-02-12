@@ -22,6 +22,30 @@ let chart = [
   },
 ];
 
+//!!!!!!!!!!BUBLİNG!!!!!!!!!
+/*
+let flag = false;
+
+let h1 = document.querySelector("h1");
+
+h1.onclick = (e) => {
+  flag = !flag;
+  flag
+    ? (h1.textContent = "E-Commerce Website")
+    : (h1.textContent = "Checkout Page");
+
+  //!çalış ve sonra parent ını etkileme
+  e.stopPropagation();
+};
+
+let header = document.querySelector("header");
+
+header.onclick = () => {
+  flag = !flag;
+  flag ? (h1.textContent = "stop") : (h1.textContent = "propagation");
+};
+*/
+
 //! Display on screen
 showScreen();
 
