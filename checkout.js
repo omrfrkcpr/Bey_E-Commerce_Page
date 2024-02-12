@@ -11,10 +11,15 @@ let chart = [
     name: "Vintage Backpack",
     price: 34.99,
     piece: 1,
-    img: "./assets/photo1.png",
+    img: "./assets/photo1.jpg",
   },
-  { name: "Levi Shoes", price: 40.99, piece: 1, img: "./assets/photo2.png" },
-  { name: "Antique Clock", price: 69.99, piece: 1, img: "./assets/photo3.jpg" },
+  { name: "Levi Shoes", price: 40.99, piece: 1, img: "./assets/photo2.jpg" },
+  {
+    name: "Antique Clock",
+    price: 69.99,
+    piece: 1,
+    img: "./assets/photo3.avif",
+  },
 ];
 
 //! Display on screen
@@ -72,7 +77,7 @@ function showScreen() {
                         </div>
       
                         <div class="mt-2">
-                          Product Total: $<span class="product-toplam">${(
+                          Product Total: <span class="product-total">${(
                             price *
                             0.7 *
                             piece
