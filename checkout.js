@@ -44,13 +44,13 @@ function showScreen() {
       
             <div class="card-body">
             
-              <h5 class="card-title">${name}</h5>
+                <h5 class="card-title">${name}</h5>
               
                    <div class="product-price">
                           <p class="text-warning h2">$
-                            <span class="indirim-price">${(price * 0.7).toFixed(
-                              2
-                            )}</span>
+                            <span class="discounted-price">${(
+                              price * 0.7
+                            ).toFixed(2)}</span>
                             <span class="h5 text-dark text-decoration-line-through">${price}</span>
                           </p>
                         </div>
@@ -93,25 +93,9 @@ function showScreen() {
 //^ Call functions
 updateCardTotal();
 removeButton();
+pieceControl();
 
-//^ remove product
-function removeButton() {
-  document.querySelectorAll(".remove-product").forEach((btn) => {
-    btn.onclick = () => {
-      // remove from screen
-      btn.closest(".card").remove();
-      // remove from chart
-      chart = chart.filter(
-        (product) =>
-          product.name != btn.closest(".card").querySelector("h5").textContent
-      );
-      // update card again after removing
-      updateCardTotal();
-    };
-  });
-}
-
-//^ update pay-table
+//^ update card-table
 function updateCardTotal() {
   // calculate Subtotal
   const productTotals = document.querySelectorAll(".product-total");
@@ -128,7 +112,7 @@ function updateCardTotal() {
     (acc, product) => acc + Number(product.textContent),
     0
   );
-  document.querySelector(".subtotal").textContent = subTotal;
+  document.querySelector(".subtotal").textContent = subTotal.toFixed(2);
 
   // calculate Tax
   let tax = Number((subTotal * taxRate).toFixed(2));
@@ -139,5 +123,71 @@ function updateCardTotal() {
 
   // calculate Total
   document.querySelector(".total").textContent =
-    subTotal > 0 ? subTotal + tax + shippingFee : 0;
+    subTotal > 0 ? (subTotal + tax + shippingFee).toFixed(2) : 0;
+}
+
+//^ remove product
+function removeButton() {
+  document.querySelectorAll(".remove-product").forEach((btn) => {
+    btn.onclick = () => {
+      if (confirm("Product will be deleted. Are you sure?")) {
+        // remove on screen
+        btn.closest(".card").remove();
+        // remove from chart
+        chart = chart.filter(
+          (product) =>
+            product.name != btn.closest(".card").querySelector("h5").textContent
+        );
+        // update card again after removing
+        updateCardTotal();
+      }
+    };
+  });
+}
+
+//^ piece control ( - + )
+function pieceControl() {
+  document.querySelectorAll(".piece-controller").forEach((control) => {
+    const plus = control.lastElementChild;
+    const minus = control.firstElementChild;
+    const piece = control.children[1];
+
+    //& when plus clicked
+    plus.onclick = () => {
+      if (piece.textContent < 10) {
+        // increase on screen
+        piece.textContent = Number(piece.textContent) + 1;
+
+        // increase in chart
+        plus.closest(".card").querySelector(".product-total").textContent = (
+          plus.closest(".card").querySelector(".discounted-price").textContent *
+          piece.textContent
+        ).toFixed(2);
+
+        // update card again after adding piece
+        updateCardTotal();
+      } else alert("You can order maximum 10 of the same product");
+    };
+
+    //& when minus clicked
+    minus.onclick = () => {
+      if (piece.textContent > 0) {
+        // increase on screen
+        piece.textContent = Number(piece.textContent) - 1;
+
+        // increase in chart
+        minus.closest(".card").querySelector(".product-total").textContent = (
+          minus.closest(".card").querySelector(".discounted-price")
+            .textContent * piece.textContent
+        ).toFixed(2);
+
+        // update card again after adding piece
+        updateCardTotal();
+      } else {
+        if (confirm("Product will be deleted. Are you sure?")) {
+          minus.closest(".card").remove();
+        }
+      }
+    };
+  });
 }
