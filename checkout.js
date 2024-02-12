@@ -8,14 +8,14 @@ const taxRate = 0.18;
 
 let chart = [
   {
-    name: "Vintage Backpack",
+    name: "Handmade Backpack",
     price: 34.99,
     piece: 1,
     img: "./assets/photo1.jpg",
   },
-  { name: "Levi Shoes", price: 40.99, piece: 1, img: "./assets/photo2.jpg" },
+  { name: "Elegant Shoes", price: 40.99, piece: 1, img: "./assets/photo2.jpg" },
   {
-    name: "Antique Clock",
+    name: "Vintage Leather Watch",
     price: 69.99,
     piece: 1,
     img: "./assets/photo3.jpg",
