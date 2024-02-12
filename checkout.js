@@ -3,8 +3,8 @@
 //*  map filter, dest,spread ===================================================
 
 //! Variables that are needed in table
-const shipping = 15.0;
-const tax = 0.18;
+let shipping = 15.0;
+const taxRate = 0.18;
 
 let chart = [
   {
@@ -88,4 +88,27 @@ function showScreen() {
         </div>
       </div>`;
   });
+}
+
+updateCardTotal();
+
+//! update pay-table
+function updateCardTotal() {
+  //! calculate Subtotal
+  const productTotals = document.querySelectorAll(".product-total");
+  const subTotal = Array.from(productTotals)
+    .reduce((acc, product) => acc + Number(product.textContent), 0)
+    .toFixed(2);
+  document.querySelector(".subtotal").textContent = subTotal;
+
+  //! calculate Tax
+  let tax = (subTotal * taxRate).toFixed(2);
+  document.querySelector(".tax").textContent = tax;
+
+  //! calculate Shipping Fee
+  subTotal ? shipping : (shipping = 0);
+  document.querySelector(".shipping").textContent = shipping;
+
+  //! calculate Total
+  document.querySelector(".total").textContent = +subTotal + +tax + shipping;
 }
