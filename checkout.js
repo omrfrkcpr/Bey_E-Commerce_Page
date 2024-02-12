@@ -3,7 +3,7 @@
 //*  map filter, dest,spread ===================================================
 
 //! Variables that are needed in table
-let shipping = 15.0;
+const shipping = 15.0;
 const taxRate = 0.18;
 
 let chart = [
@@ -90,25 +90,54 @@ function showScreen() {
   });
 }
 
+//^ Call functions
 updateCardTotal();
+removeButton();
 
-//! update pay-table
+//^ remove product
+function removeButton() {
+  document.querySelectorAll(".remove-product").forEach((btn) => {
+    btn.onclick = () => {
+      // remove from screen
+      btn.closest(".card").remove();
+      // remove from chart
+      chart = chart.filter(
+        (product) =>
+          product.name != btn.closest(".card").querySelector("h5").textContent
+      );
+      // update card again after removing
+      updateCardTotal();
+    };
+  });
+}
+
+//^ update pay-table
 function updateCardTotal() {
-  //! calculate Subtotal
+  // calculate Subtotal
   const productTotals = document.querySelectorAll(".product-total");
-  const subTotal = Array.from(productTotals)
-    .reduce((acc, product) => acc + Number(product.textContent), 0)
-    .toFixed(2);
+
+  /* 
+   querySelectorAll(), return a static NodeList
+   https://softauthor.com/javascript-htmlcollection-vs-nodelist/
+   Not an Array!
+   In NodeList Array methods can be used except reduce(), push(), pop(), join()
+   For using reduce method first we need to convert NodeList to an Array (with using Array.from())
+  */
+
+  const subTotal = Array.from(productTotals).reduce(
+    (acc, product) => acc + Number(product.textContent),
+    0
+  );
   document.querySelector(".subtotal").textContent = subTotal;
 
-  //! calculate Tax
-  let tax = (subTotal * taxRate).toFixed(2);
+  // calculate Tax
+  let tax = Number((subTotal * taxRate).toFixed(2));
   document.querySelector(".tax").textContent = tax;
 
-  //! calculate Shipping Fee
-  subTotal ? shipping : (shipping = 0);
-  document.querySelector(".shipping").textContent = shipping;
+  // calculate Shipping Fee
+  document.querySelector(".shipping").textContent = subTotal ? shipping : 0;
 
-  //! calculate Total
-  document.querySelector(".total").textContent = +subTotal + +tax + shipping;
+  // calculate Total
+  document.querySelector(".total").textContent =
+    subTotal > 0 ? subTotal + tax + shipping : 0;
 }
