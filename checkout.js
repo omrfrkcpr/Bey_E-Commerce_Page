@@ -3,7 +3,7 @@
 //*  map filter, dest,spread ===================================================
 
 //! Variables that are needed in table
-const shipping = 15.0;
+const shippingFee = 15.0;
 const taxRate = 0.18;
 
 let chart = [
@@ -135,9 +135,9 @@ function updateCardTotal() {
   document.querySelector(".tax").textContent = tax;
 
   // calculate Shipping Fee
-  document.querySelector(".shipping").textContent = subTotal ? shipping : 0;
+  document.querySelector(".shipping").textContent = subTotal ? shippingFee : 0;
 
   // calculate Total
   document.querySelector(".total").textContent =
-    subTotal > 0 ? subTotal + tax + shipping : 0;
+    subTotal > 0 ? subTotal + tax + shippingFee : 0;
 }
