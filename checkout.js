@@ -5,19 +5,25 @@
 //! Variables that are needed in table
 const shippingFee = 15.0;
 const taxRate = 0.18;
+let piece = 1;
 
 let chart = [
   {
     name: "Handmade Backpack",
     price: 34.99,
-    piece: 1,
+    piece: piece,
     img: "./assets/photo1.jpg",
   },
-  { name: "Elegant Shoes", price: 40.99, piece: 1, img: "./assets/photo2.jpg" },
+  {
+    name: "Elegant Shoes",
+    price: 40.99,
+    piece: piece,
+    img: "./assets/photo2.jpg",
+  },
   {
     name: "Vintage Leather Watch",
     price: 69.99,
-    piece: 1,
+    piece: piece,
     img: "./assets/photo3.jpg",
   },
 ];
@@ -45,6 +51,17 @@ header.onclick = () => {
   flag ? (h1.textContent = "stop") : (h1.textContent = "propagation");
 };
 */
+
+document.querySelector(".chart-btn").onclick = () => {
+  const container = document.querySelector(".container");
+  container.classList.toggle("display");
+  // Toggle opacity after a short delay to ensure transition effect is applied
+  setTimeout(() => {
+    container.style.opacity = container.classList.contains("display")
+      ? "1"
+      : "0";
+  }, 50); // Adjust the delay as needed
+};
 
 //! Display on screen
 showScreen();
