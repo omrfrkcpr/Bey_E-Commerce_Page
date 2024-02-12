@@ -18,7 +18,7 @@ let chart = [
     name: "Antique Clock",
     price: 69.99,
     piece: 1,
-    img: "./assets/photo3.avif",
+    img: "./assets/photo3.jpg",
   },
 ];
 
