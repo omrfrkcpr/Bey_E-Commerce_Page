@@ -1,36 +1,29 @@
-<p>Clarusway<img align="right"
-  src="https://secure.meetupstatic.com/photos/event/3/1/b/9/600_488352729.jpeg"  width="15px"></p>
-
-# Project-03 : Checkout_Page (JS-03)
+# Bey_E-Commerce_Website
 
 ## Description
-Project aims to create a real checkout page of e-commerce website.
-
-## Learning Outcomes
-
-At the end of the this project, students will be able to;
-
-- analyze a problem, create e-commerce website page.
-
-- demonstrate their knowledge of algorithmic design principles for dynamic calculation of product's cart.
-
+Project aims to create a real e-commerce website with chart.
    
 ## Problem Statement
 
 - Create a checkout page following the design and make the calculation of cart dynamically with using of DOM and Event in JS.
 
-![Form](checkout_app.gif)
+## Outcome
+
+
 
 ## Project Skeleton 
 
 ```
-03-Checkout_Page (folder)
+Bey_E-Commerce-Website (folder)
 |
-|----readme.md         # Given to the students (Definition of the project)          
-|----solution
-        |----index.html  
-        |----style.css   
-        |----App.js
+|----assets          
+|----lib           
+|----index.html  
+|----LICENCE  
+|----project.gif
+|----project.js
+|----readme.md           
+|----style.css   
 ```
 
 -  User stories;
@@ -41,7 +34,3 @@ At the end of the this project, students will be able to;
    - When I change any combination of product chart(plus, minus, remove etc.), I want to see the new calculation of chart's prices in concerned fields.
 
 
-
-## Resources
-
-- [Images](./img/)
