@@ -1,234 +1,185 @@
-//* ===================================================
-//*                 Checkout Page Solution
-//*  map filter, dest,spread ===================================================
+window.addEventListener("DOMContentLoaded", () => {
+  let chart = [];
 
-//! Variables that are needed in table
-const shippingFee = 15.0;
-const taxRate = 0.18;
-let piece = 1;
+  function addToChart(itemName, itemPrice, itemDiscountedPrice, itemImg) {
+    const item = {
+      name: itemName.trim(),
+      price: itemPrice,
+      discountedPrice: itemDiscountedPrice,
+      piece: 1,
+      img: itemImg,
+    };
+    const existingProductIndex = chart.findIndex(
+      (product) => product.name === itemName.trim()
+    );
+    if (existingProductIndex !== -1) {
+      chart[existingProductIndex].piece += 1;
+    } else {
+      chart.push(item);
+    }
+    updateCart();
+    updateProductTotal(itemName.trim());
+  }
 
-let chart = [
-  {
-    name: "Handmade Backpack",
-    price: 34.99,
-    piece: piece,
-    img: "./assets/photo1.jpg",
-  },
-  {
-    name: "Elegant Shoes",
-    price: 40.99,
-    piece: piece,
-    img: "./assets/photo2.jpg",
-  },
-  {
-    name: "Vintage Leather Watch",
-    price: 69.99,
-    piece: piece,
-    img: "./assets/photo3.jpg",
-  },
-];
-
-//!!!!!!!!!!BUBLİNG!!!!!!!!!
-/*
-let flag = false;
-
-let h1 = document.querySelector("h1");
-
-h1.onclick = (e) => {
-  flag = !flag;
-  flag
-    ? (h1.textContent = "E-Commerce Website")
-    : (h1.textContent = "Checkout Page");
-
-  //!çalış ve sonra parent ını etkileme
-  e.stopPropagation();
-};
-
-let header = document.querySelector("header");
-
-header.onclick = () => {
-  flag = !flag;
-  flag ? (h1.textContent = "stop") : (h1.textContent = "propagation");
-};
-*/
-
-document.querySelector(".chart-btn").onclick = () => {
-  const container = document.querySelector(".container");
-  container.classList.toggle("display");
-  // Toggle opacity after a short delay to ensure transition effect is applied
-  setTimeout(() => {
-    container.style.opacity = container.classList.contains("display")
-      ? "1"
-      : "0";
-  }, 50); // Adjust the delay as needed
-};
-
-//! Display on screen
-showScreen();
-
-function showScreen() {
-  chart.forEach(({ name, price, piece, img }) => {
-    //DESTRUCTURING
-    // const { name, price, piece, img } = product;
-
-    document.querySelector(
-      "#product-rows"
-    ).innerHTML += ` <div class="card mb-3" style="max-width: 540px;">
-
-        <div class="row g-0 align-items-center p-3">
-      
-          <div class="col-md-5">
-            <img src=${img} class=" w-100 rounded-start" alt="...">
-          </div>
-      
-          <div class="col-md-7 ">
-      
-            <div class="card-body">
-            
-                <h5 class="card-title">${name}</h5>
-              
-                   <div class="product-price">
-                          <p class="text-warning h2">$
-                            <span class="discounted-price">${(
-                              price * 0.7
-                            ).toFixed(2)}</span>
-                            <span class="h5 text-dark text-decoration-line-through">${price}</span>
-                          </p>
-                        </div>
-                        
-                        <div
-                          class="border border-1 border-dark shadow-lg d-flex justify-content-center p-2"
-                        >
-                          <div class="piece-controller">
-                            <button class="btn btn-secondary btn-sm minus">
-                              <i class="fas fa-minus"></i>
-                            </button>
-                            <p class="d-inline mx-4" id="product-piece">${piece}</p>
-                            <button class="btn btn-secondary btn-sm plus">
-                              <i class="fas fa-plus"></i>
-                            </button>
-                          </div>
-      
-                        </div>
-      
-                        <div class="product-removal mt-4">
-                          <button class="btn btn-danger btn-sm w-100 remove-product">
-                            <i class="fa-solid fa-trash-can me-2"></i>Remove
-                          </button>
-                        </div>
-      
-                        <div class="mt-2">
-                          Product Total: <span class="product-total">${(
-                            price *
-                            0.7 *
-                            piece
-                          ).toFixed(2)}</span>
-                        </div>
-            </div>
-          </div>
-        </div>
-      </div>`;
-  });
-}
-
-//^ Call functions
-updateCardTotal();
-removeButton();
-pieceControl();
-
-//^ update card-table
-function updateCardTotal() {
-  // calculate Subtotal
-  const productTotals = document.querySelectorAll(".product-total");
-
-  /* 
-   querySelectorAll(), return a static NodeList
-   https://softauthor.com/javascript-htmlcollection-vs-nodelist/
-   Not an Array!
-   In NodeList Array methods can be used except reduce(), push(), pop(), join()
-   For using reduce method first we need to convert NodeList to an Array (with using Array.from())
-  */
-
-  const subTotal = Array.from(productTotals).reduce(
-    (acc, product) => acc + Number(product.textContent),
-    0
-  );
-  document.querySelector(".subtotal").textContent = subTotal.toFixed(2);
-
-  // calculate Tax
-  let tax = Number((subTotal * taxRate).toFixed(2));
-  document.querySelector(".tax").textContent = tax;
-
-  // calculate Shipping Fee
-  document.querySelector(".shipping").textContent = subTotal ? shippingFee : 0;
-
-  // calculate Total
-  document.querySelector(".total").textContent =
-    subTotal > 0 ? (subTotal + tax + shippingFee).toFixed(2) : 0;
-}
-
-//^ remove product
-function removeButton() {
-  document.querySelectorAll(".remove-product").forEach((btn) => {
-    btn.onclick = () => {
-      if (confirm("Product will be deleted. Are you sure?")) {
-        // remove on screen
-        btn.closest(".card").remove();
-        // remove from chart
-        chart = chart.filter(
-          (product) =>
-            product.name != btn.closest(".card").querySelector("h5").textContent
-        );
-        // update card again after removing
-        updateCardTotal();
+  function updatePiece(productName, operation) {
+    const productIndex = chart.findIndex(
+      (product) => product.name === productName
+    );
+    if (productIndex !== -1) {
+      if (operation === "plus") {
+        chart[productIndex].piece += 1;
+      } else if (operation === "minus" && chart[productIndex].piece > 1) {
+        chart[productIndex].piece -= 1;
       }
-    };
+      updateCart();
+    }
+  }
+
+  function removeFromChart(productName) {
+    const productIndex = chart.findIndex(
+      (product) => product.name === productName.trim()
+    );
+    if (productIndex !== -1) {
+      chart.splice(productIndex, 1);
+      updateCart();
+    }
+  }
+
+  document.addEventListener("click", (event) => {
+    if (event.target.classList.contains("add-btn")) {
+      const card = event.target.closest(".item");
+      const itemName = card.querySelector(".fw-bold").textContent;
+      const itemPrice = parseFloat(
+        card.querySelector(".discounted-price").textContent
+      );
+      const itemDiscountedPrice = parseFloat(
+        card.querySelector(".discounted-price").textContent
+      );
+      const itemImg = card.querySelector(".img-thumbnail").src;
+      addToChart(itemName, itemPrice, itemDiscountedPrice, itemImg);
+    } else if (event.target.classList.contains("remove-product")) {
+      if (confirm("Ürünü silmek istediğinizden emin misiniz?")) {
+        const productName = event.target
+          .closest(".card")
+          .querySelector(".fw-bold").textContent;
+        removeFromChart(productName);
+      }
+    } else if (
+      event.target.classList.contains("minus") ||
+      event.target.classList.contains("fa-minus")
+    ) {
+      const productName = event.target
+        .closest(".piece-controller")
+        .querySelector(".d-inline")
+        .id.replace("product-piece-", "");
+      updatePiece(productName, "minus");
+    } else if (
+      event.target.classList.contains("plus") ||
+      event.target.classList.contains("fa-plus")
+    ) {
+      const productName = event.target
+        .closest(".piece-controller")
+        .querySelector(".d-inline")
+        .id.replace("product-piece-", "");
+      updatePiece(productName, "plus");
+    }
   });
-}
 
-//^ piece control ( - + )
-function pieceControl() {
-  document.querySelectorAll(".piece-controller").forEach((control) => {
-    const plus = control.lastElementChild;
-    const minus = control.firstElementChild;
-    const piece = control.children[1];
+  function updateCart() {
+    const productRows = document.querySelector("#product-rows");
+    productRows.innerHTML = "";
 
-    //& when plus clicked
-    plus.onclick = () => {
-      if (piece.textContent < 10) {
-        // increase on screen
-        piece.textContent = Number(piece.textContent) + 1;
+    if (chart.length === 0) {
+      productRows.innerHTML = "<p>No items in the cart</p>";
+    } else {
+      chart.forEach(({ name, price, discountedPrice, piece, img }) => {
+        productRows.innerHTML += `
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0 align-items-center p-3">
+                    <div class="col-md-5">
+                        <img src="${img}" class="w-100 rounded-start" alt="Product Image">
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">${name}</h5>
+                            <div class="product-price">
+                                <p class="text-warning h2">$<span class="discounted-price">${discountedPrice}</span>
+                                    <span class="h5 text-dark text-decoration-line-through original-price">$${price}</span>
+                                </p>
+                            </div>
+                            <div class="border border-1 border-dark shadow-lg d-flex justify-content-center p-2">
+                                <div class="piece-controller">
+                                    <button class="btn btn-secondary btn-sm minus" data-product="${name}"><i class="fas fa-minus"></i></button>
+                                    <p class="d-inline mx-4" id="product-piece-${name}">${piece}</p>
+                                    <button class="btn btn-secondary btn-sm plus" data-product="${name}"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="product-removal mt-4">
+                                <button class="btn btn-danger btn-sm w-100 remove-product" data-product="${name}">
+                                    <i class="fa-solid fa-trash-can me-2"></i>Remove
+                                </button>
+                            </div>
+                            <div class="mt-2">Product Total: <span class="product-total" id="product-total-${name}">$${(
+          discountedPrice * piece
+        ).toFixed(2)}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+      });
+    }
+    updateCartTotal();
+  }
 
-        // increase in chart
-        plus.closest(".card").querySelector(".product-total").textContent = (
-          plus.closest(".card").querySelector(".discounted-price").textContent *
-          piece.textContent
-        ).toFixed(2);
+  function updateCartTotal() {
+    const productTotals = document.querySelectorAll(".product-total");
+    let subtotal = 0;
+    productTotals.forEach((total) => {
+      subtotal += parseFloat(total.textContent.replace("$", ""));
+    });
 
-        // update card again after adding piece
-        updateCardTotal();
-      } else alert("You can order maximum 10 of the same product");
-    };
+    const taxRate = 0.18;
+    const tax = subtotal * taxRate;
+    const shippingFee = subtotal > 0 ? 15.0 : 0;
 
-    //& when minus clicked
-    minus.onclick = () => {
-      if (piece.textContent > 0) {
-        // increase on screen
-        piece.textContent = Number(piece.textContent) - 1;
+    document.querySelector(".subtotal").textContent = `${subtotal.toFixed(2)}`;
+    document.querySelector(".tax").textContent = `${tax.toFixed(2)}`;
+    document.querySelector(".shipping").textContent = `${shippingFee.toFixed(
+      2
+    )}`;
+    document.querySelector(".total").textContent = `${(
+      subtotal +
+      tax +
+      shippingFee
+    ).toFixed(2)}`;
+  }
 
-        // increase in chart
-        minus.closest(".card").querySelector(".product-total").textContent = (
-          minus.closest(".card").querySelector(".discounted-price")
-            .textContent * piece.textContent
-        ).toFixed(2);
-
-        // update card again after adding piece
-        updateCardTotal();
+  function updateProductTotal(productName) {
+    const product = chart.find((product) => product.name === productName);
+    if (product) {
+      const productTotalElement = document.querySelector(
+        `#product-total-${productName}`
+      );
+      if (productTotalElement) {
+        const total = product.discountedPrice * product.piece;
+        productTotalElement.textContent = `$${total.toFixed(2)}`;
       } else {
-        if (confirm("Product will be deleted. Are you sure?")) {
-          minus.closest(".card").remove();
-        }
+        console.error(`Product total element not found for ${productName}`);
       }
-    };
-  });
-}
+    } else {
+      console.error(`Product not found with name ${productName}`);
+    }
+  }
+
+  document.querySelector(".chart-btn").onclick = () => {
+    const container = document.querySelector(".container");
+    container.classList.toggle("display");
+    setTimeout(() => {
+      container.style.opacity = container.classList.contains("display")
+        ? "1"
+        : "0";
+    }, 50);
+  };
+
+  updateCart();
+});
