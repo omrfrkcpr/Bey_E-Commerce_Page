@@ -1,21 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Satisfy&display=swap");
+#box {
+  background: linear-gradient(
+    to right,
+    rgb(212, 194, 171) 0%,
+    beige 50%,
+    rgb(212, 194, 171) 100%
+  );
+  box-shadow: 10px 4px 10px rgba(0, 0, 0, 0.5);
+  position: sticky;
+}
+
+.logo {
+  width: 150px;
+  height: 150px;
+  padding-top: 15px;
+  border-radius: 50%;
+  background-color: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-family: "Satisfy", cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 3rem;
+}
+
+.header-logo img {
+  width: 120px;
+}
+
+.container-fluid {
+  background-color: beige;
+}
+
 .chart-btn {
   position: absolute;
   height: 50px !important;
   width: 50px;
-  right: 50px;
   padding: 0.3rem 0.2rem 0 0;
   border-radius: 50%;
-  top: 50px;
+  top: 100px;
+  right: 80px;
   border: none;
   background-color: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .chart-btn i {
-  font-size: 1.5rem;
+  font-size: 2rem;
+  margin-bottom: 0.4rem;
 }
 
 .chart-btn:hover {
-  background-color: lightgray;
   opacity: 0.5;
 }
 
@@ -43,4 +85,8 @@
 .add-btn:hover {
   padding: 0.2rem 1.2rem;
   opacity: 0.7;
+}
+
+.bg-light {
+  background: initial;
 }
