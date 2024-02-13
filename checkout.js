@@ -55,7 +55,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const card = event.target.closest(".item");
       const itemName = card.querySelector(".fw-bold").textContent;
       const itemPrice = parseFloat(
-        card.querySelector(".discounted-price").textContent
+        card.querySelector(".original-price").textContent
       );
       const itemDiscountedPrice = parseFloat(
         card.querySelector(".discounted-price").textContent
@@ -63,7 +63,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const itemImg = card.querySelector(".img-thumbnail").src;
       addToChart(itemName, itemPrice, itemDiscountedPrice, itemImg);
     } else if (event.target.classList.contains("remove-product")) {
-      if (confirm("Ürünü silmek istediğinizden emin misiniz?")) {
+      if (confirm("Are you sure you want to delete the product?")) {
         const productName = event.target
           .closest(".card")
           .querySelector(".fw-bold").textContent;
@@ -177,12 +177,17 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   document.querySelector(".chart-btn").onclick = () => {
+    document.querySelector("#box").style.marginBottom = "0px";
+
+    const nav = document.querySelector(".nav");
+    nav.classList.toggle("scale");
     const container = document.querySelector(".container");
     container.classList.toggle("display");
     setTimeout(() => {
       container.style.opacity = container.classList.contains("display")
         ? "1"
         : "0";
+      nav.style.opacity = nav.classList.contains("scale") ? "1" : "0";
     }, 50);
   };
 
