@@ -177,11 +177,23 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   document.querySelector(".chart-btn").onclick = () => {
-    document.querySelector("#box").style.marginBottom = "0px";
-
     const nav = document.querySelector(".nav");
     nav.classList.toggle("scale");
     const container = document.querySelector(".container");
+
+    if (!container.classList.contains("display")) {
+      // Container'ı sayfanın dışına çıkar
+      container.style.position = "fixed";
+      container.style.top = "-9999px";
+      container.style.right = "-9999px";
+    } else {
+      // Container'ı tekrar eski konumuna getir
+      container.style.position = "absolute";
+      container.style.top = "100px";
+      container.style.right = "-70px";
+      container.style.width = "550px";
+    }
+
     container.classList.toggle("display");
     setTimeout(() => {
       container.style.opacity = container.classList.contains("display")
