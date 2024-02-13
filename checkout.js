@@ -2,21 +2,26 @@ window.addEventListener("DOMContentLoaded", () => {
   let chart = [];
 
   function addToChart(itemName, itemPrice, itemDiscountedPrice, itemImg) {
-    const item = {
-      name: itemName.trim(),
-      price: itemPrice,
-      discountedPrice: itemDiscountedPrice,
-      piece: 1,
-      img: itemImg,
-    };
     const existingProductIndex = chart.findIndex(
       (product) => product.name === itemName.trim()
     );
-    if (existingProductIndex !== -1) {
+
+    // Eğer ürün zaten sepette varsa ve adedi 10'dan az ise, bir ekleyelim
+    if (existingProductIndex !== -1 && chart[existingProductIndex].piece < 10) {
       chart[existingProductIndex].piece += 1;
-    } else {
+    }
+    // Eğer ürün sepette yoksa ve adedi 10'dan az ise, yeni bir ürün ekleyelim
+    else if (existingProductIndex === -1) {
+      const item = {
+        name: itemName.trim(),
+        price: itemPrice,
+        discountedPrice: itemDiscountedPrice,
+        piece: 1,
+        img: itemImg,
+      };
       chart.push(item);
     }
+
     updateCart();
     updateProductTotal(itemName.trim());
   }
