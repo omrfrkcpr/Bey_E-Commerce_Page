@@ -1,11 +1,12 @@
 window.addEventListener("DOMContentLoaded", () => {
   let chart = [];
+  let sumPiece = 0;
 
   function updateChartButtonContent() {
-    const chartLength = chart.length;
+    const chartLength = sumPiece;
     const chartBtn = document.querySelector(".chart-btn");
     if (chartLength > 0) {
-      chartBtn.setAttribute("data-chart-length", chartLength);
+      chartBtn.setAttribute("data-chart-length", sumPiece);
     } else {
       chartBtn.removeAttribute("data-chart-length");
     }
@@ -19,6 +20,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // Eğer ürün zaten sepette varsa ve adedi 10'dan az ise, bir ekleyelim
     if (existingProductIndex !== -1 && chart[existingProductIndex].piece < 10) {
       chart[existingProductIndex].piece += 1;
+      sumPiece++;
     }
     // Eğer ürün sepette yoksa ve adedi 10'dan az ise, yeni bir ürün ekleyelim
     else if (existingProductIndex === -1) {
@@ -30,6 +32,7 @@ window.addEventListener("DOMContentLoaded", () => {
         img: itemImg,
       };
       chart.push(item);
+      sumPiece++;
     }
 
     updateCart();
@@ -42,10 +45,14 @@ window.addEventListener("DOMContentLoaded", () => {
       (product) => product.name === productName
     );
     if (productIndex !== -1) {
-      if (operation === "plus") {
+      if (operation === "plus" && chart[productIndex].piece < 10) {
+        sumPiece += 1; // sumPiece'i artır
         chart[productIndex].piece += 1;
+        updateChartButtonContent();
       } else if (operation === "minus" && chart[productIndex].piece > 1) {
+        sumPiece -= 1; // sumPiece'i azaltir
         chart[productIndex].piece -= 1;
+        updateChartButtonContent();
       }
       updateCart();
     }
@@ -56,6 +63,7 @@ window.addEventListener("DOMContentLoaded", () => {
       (product) => product.name === productName.trim()
     );
     if (productIndex !== -1) {
+      sumPiece -= chart[productIndex].piece;
       chart.splice(productIndex, 1);
       updateCart();
       updateChartButtonContent();
