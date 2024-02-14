@@ -58,6 +58,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (productIndex !== -1) {
       chart.splice(productIndex, 1);
       updateCart();
+      updateChartButtonContent();
     }
   }
 
