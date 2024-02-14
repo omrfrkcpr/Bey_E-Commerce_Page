@@ -53,6 +53,16 @@ window.addEventListener("DOMContentLoaded", () => {
         sumPiece -= 1; // sumPiece'i azaltir
         chart[productIndex].piece -= 1;
         updateChartButtonContent();
+      } else if (operation === "plus" && chart[productIndex].piece == 10)
+        alert(
+          "You can order maximum 10 pieces of the same product in one purchase"
+        );
+      else if (operation === "minus" && chart[productIndex].piece == 1) {
+        if (confirm("Are you sure you want to delete this product?")) {
+          sumPiece -= chart[productIndex].piece;
+          chart.splice(productIndex, 1);
+          updateChartButtonContent();
+        }
       }
       updateCart();
     }
@@ -107,8 +117,24 @@ window.addEventListener("DOMContentLoaded", () => {
         .querySelector(".d-inline")
         .id.replace("product-piece-", "");
       updatePiece(productName, "plus");
-    }
+    } else clickOutsideNav(event);
   });
+
+  // listen if we click outside of the chart
+  const clickOutsideNav = (event) => {
+    const nav = document.querySelector(".nav");
+    const chartBtn = document.querySelector(".chart-btn");
+
+    if (
+      nav.classList.contains("scale") &&
+      !event.target.closest(".container") &&
+      !event.target.closest(".chart-btn")
+    ) {
+      if (chartBtn) {
+        chartBtn.click();
+      }
+    }
+  };
 
   function updateCart() {
     const productRows = document.querySelector("#product-rows");
@@ -189,16 +215,18 @@ window.addEventListener("DOMContentLoaded", () => {
         const total = product.discountedPrice * product.piece;
         productTotalElement.textContent = `$${total.toFixed(2)}`;
       } else {
-        console.error(`Product total element not found for ${productName}`);
+        // console.error(`Product total element not found for ${productName}`);
       }
     } else {
-      console.error(`Product not found with name ${productName}`);
+      // console.error(`Product not found with name ${productName}`);
     }
   }
 
+  // after clicking on chart icon
   document.querySelector(".chart-btn").onclick = () => {
     const nav = document.querySelector(".nav");
     nav.classList.toggle("scale");
+
     const container = document.querySelector(".container");
 
     if (!container.classList.contains("display")) {
