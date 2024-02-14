@@ -1,5 +1,7 @@
 # Bey_E-Commerce_Website
 
+https://omrfrkcpr.github.io/Bey_E-Commerce_Website/
+
 ## Description
 Project aims to create a real e-commerce website with chart.
    
@@ -9,7 +11,7 @@ Project aims to create a real e-commerce website with chart.
 
 ## Outcome
 
-
+![project](https://github.com/omrfrkcpr/Bey_E-Commerce_Website/assets/77440899/8942f242-d0ea-4d89-b3fc-88b7e6e1b51b)
 
 ## Project Skeleton 
 
