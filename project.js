@@ -1,6 +1,16 @@
 window.addEventListener("DOMContentLoaded", () => {
   let chart = [];
 
+  function updateChartButtonContent() {
+    const chartLength = chart.length;
+    const chartBtn = document.querySelector(".chart-btn");
+    if (chartLength > 0) {
+      chartBtn.setAttribute("data-chart-length", chartLength);
+    } else {
+      chartBtn.removeAttribute("data-chart-length");
+    }
+  }
+
   function addToChart(itemName, itemPrice, itemDiscountedPrice, itemImg) {
     const existingProductIndex = chart.findIndex(
       (product) => product.name === itemName.trim()
@@ -24,6 +34,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     updateCart();
     updateProductTotal(itemName.trim());
+    updateChartButtonContent();
   }
 
   function updatePiece(productName, operation) {
