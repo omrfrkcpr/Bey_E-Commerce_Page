@@ -50,7 +50,7 @@ h1 {
   background-color: beige;
 }
 
-.chart-btn {
+.cart-btn {
   position: absolute;
   height: 40px !important;
   width: 40px;
@@ -67,13 +67,13 @@ h1 {
   z-index: 5000;
 }
 
-.chart-btn i {
+.cart-btn i {
   font-size: 2rem;
   margin-bottom: 0.4rem;
   z-index: 5000;
 }
 
-.chart-btn:hover {
+.cart-btn:hover {
   opacity: 0.5;
 }
 
@@ -134,8 +134,8 @@ h1 {
   background-color: #f1f1f1; /* Kaydırma çubuğu yuvası rengi */
 }
 
-.chart-btn::after {
-  content: attr(data-chart-length);
+.cart-btn::after {
+  content: attr(data-cart-length);
   position: absolute;
   bottom: 20px;
   right: 0;
@@ -151,7 +151,7 @@ h1 {
   z-index: 9999;
 }
 
-.chart-btn[data-chart-length]:not([data-chart-length="0"])::after {
+.cart-btn[data-cart-length]:not([data-cart-length="0"])::after {
   display: flex; /* 0'dan farklıysa görünür */
   opacity: 1;
 }

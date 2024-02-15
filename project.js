@@ -1,25 +1,25 @@
 window.addEventListener("DOMContentLoaded", () => {
-  let chart = [];
+  let cart = [];
   let sumPiece = 0;
 
-  function updateChartButtonContent() {
-    const chartLength = sumPiece;
-    const chartBtn = document.querySelector(".chart-btn");
-    if (chartLength > 0) {
-      chartBtn.setAttribute("data-chart-length", sumPiece);
+  function updateCartButtonContent() {
+    const cartLength = sumPiece;
+    const cartBtn = document.querySelector(".cart-btn");
+    if (cartLength > 0) {
+      cartBtn.setAttribute("data-cart-length", sumPiece);
     } else {
-      chartBtn.removeAttribute("data-chart-length");
+      cartBtn.removeAttribute("data-cart-length");
     }
   }
 
-  function addToChart(itemName, itemPrice, itemDiscountedPrice, itemImg) {
-    const existingProductIndex = chart.findIndex(
+  function addToCart(itemName, itemPrice, itemDiscountedPrice, itemImg) {
+    const existingProductIndex = cart.findIndex(
       (product) => product.name === itemName.trim()
     );
 
     // Eğer ürün zaten sepette varsa ve adedi 10'dan az ise, bir ekleyelim
-    if (existingProductIndex !== -1 && chart[existingProductIndex].piece < 10) {
-      chart[existingProductIndex].piece += 1;
+    if (existingProductIndex !== -1 && cart[existingProductIndex].piece < 10) {
+      cart[existingProductIndex].piece += 1;
       sumPiece++;
     }
     // Eğer ürün sepette yoksa ve adedi 10'dan az ise, yeni bir ürün ekleyelim
@@ -31,52 +31,56 @@ window.addEventListener("DOMContentLoaded", () => {
         piece: 1,
         img: itemImg,
       };
-      chart.push(item);
+      cart.push(item);
       sumPiece++;
+    } else if (cart[existingProductIndex].piece == 10) {
+      alert(
+        "You can order maximum 10 pieces of the same product in one purchase"
+      );
     }
 
     updateCart();
     updateProductTotal(itemName.trim());
-    updateChartButtonContent();
+    updateCartButtonContent();
   }
 
   function updatePiece(productName, operation) {
-    const productIndex = chart.findIndex(
+    const productIndex = cart.findIndex(
       (product) => product.name === productName
     );
     if (productIndex !== -1) {
-      if (operation === "plus" && chart[productIndex].piece < 10) {
+      if (operation === "plus" && cart[productIndex].piece < 10) {
         sumPiece += 1; // sumPiece'i artır
-        chart[productIndex].piece += 1;
-        updateChartButtonContent();
-      } else if (operation === "minus" && chart[productIndex].piece > 1) {
+        cart[productIndex].piece += 1;
+        updateCartButtonContent();
+      } else if (operation === "minus" && cart[productIndex].piece > 1) {
         sumPiece -= 1; // sumPiece'i azaltir
-        chart[productIndex].piece -= 1;
-        updateChartButtonContent();
-      } else if (operation === "plus" && chart[productIndex].piece == 10)
+        cart[productIndex].piece -= 1;
+        updateCartButtonContent();
+      } else if (operation === "plus" && cart[productIndex].piece == 10)
         alert(
           "You can order maximum 10 pieces of the same product in one purchase"
         );
-      else if (operation === "minus" && chart[productIndex].piece == 1) {
+      else if (operation === "minus" && cart[productIndex].piece == 1) {
         if (confirm("Are you sure you want to delete this product?")) {
-          sumPiece -= chart[productIndex].piece;
-          chart.splice(productIndex, 1);
-          updateChartButtonContent();
+          sumPiece -= cart[productIndex].piece;
+          cart.splice(productIndex, 1);
+          updateCartButtonContent();
         }
       }
       updateCart();
     }
   }
 
-  function removeFromChart(productName) {
-    const productIndex = chart.findIndex(
+  function removeFromCart(productName) {
+    const productIndex = cart.findIndex(
       (product) => product.name === productName.trim()
     );
     if (productIndex !== -1) {
-      sumPiece -= chart[productIndex].piece;
-      chart.splice(productIndex, 1);
+      sumPiece -= cart[productIndex].piece;
+      cart.splice(productIndex, 1);
       updateCart();
-      updateChartButtonContent();
+      updateCartButtonContent();
     }
   }
 
@@ -91,13 +95,13 @@ window.addEventListener("DOMContentLoaded", () => {
         card.querySelector(".discounted-price").textContent
       );
       const itemImg = card.querySelector(".img-thumbnail").src;
-      addToChart(itemName, itemPrice, itemDiscountedPrice, itemImg);
+      addToCart(itemName, itemPrice, itemDiscountedPrice, itemImg);
     } else if (event.target.classList.contains("remove-product")) {
       if (confirm("Are you sure you want to delete the product?")) {
         const productName = event.target
           .closest(".card")
           .querySelector(".fw-bold").textContent;
-        removeFromChart(productName);
+        removeFromCart(productName);
       }
     } else if (
       event.target.classList.contains("minus") ||
@@ -120,18 +124,18 @@ window.addEventListener("DOMContentLoaded", () => {
     } else clickOutsideNav(event);
   });
 
-  // listen if we click outside of the chart
+  // listen if we click outside of the cart
   const clickOutsideNav = (event) => {
     const nav = document.querySelector(".nav");
-    const chartBtn = document.querySelector(".chart-btn");
+    const cartBtn = document.querySelector(".cart-btn");
 
     if (
       nav.classList.contains("scale") &&
       !event.target.closest(".container") &&
-      !event.target.closest(".chart-btn")
+      !event.target.closest(".cart-btn")
     ) {
-      if (chartBtn) {
-        chartBtn.click();
+      if (cartBtn) {
+        cartBtn.click();
       }
     }
   };
@@ -140,10 +144,10 @@ window.addEventListener("DOMContentLoaded", () => {
     const productRows = document.querySelector("#product-rows");
     productRows.innerHTML = "";
 
-    if (chart.length === 0) {
+    if (cart.length === 0) {
       productRows.innerHTML = "<p>No items in the cart</p>";
     } else {
-      chart.forEach(({ name, price, discountedPrice, piece, img }) => {
+      cart.forEach(({ name, price, discountedPrice, piece, img }) => {
         productRows.innerHTML += `
             <div class="card mb-3" style="max-width: 540px;">
                 <div class="row g-0 align-items-center p-3">
@@ -206,7 +210,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateProductTotal(productName) {
-    const product = chart.find((product) => product.name === productName);
+    const product = cart.find((product) => product.name === productName);
     if (product) {
       const productTotalElement = document.querySelector(
         `#product-total-${productName}`
@@ -222,8 +226,8 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // after clicking on chart icon
-  document.querySelector(".chart-btn").onclick = () => {
+  // after clicking on cart icon
+  document.querySelector(".cart-btn").onclick = () => {
     const nav = document.querySelector(".nav");
     nav.classList.toggle("scale");
 
